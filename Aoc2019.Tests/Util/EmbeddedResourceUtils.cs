@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Aoc2019.Util
+namespace Aoc2019.Tests.Util
 {
     public class EmbeddedResourceUtils
     {

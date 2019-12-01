@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Aoc2019.Util
+namespace Aoc2019.Tests.Util
 {
     public static class EnumerableExtensions
     {

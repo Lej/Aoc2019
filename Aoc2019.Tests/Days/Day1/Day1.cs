@@ -1,9 +1,9 @@
-﻿using Aoc2019.Util;
+﻿using Aoc2019.Tests.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 
-namespace Aoc2019.Puzzles.Day1
+namespace Aoc2019.Tests.Days.Day1
 {
     [TestClass]
     public class Day1
@@ -11,7 +11,7 @@ namespace Aoc2019.Puzzles.Day1
         [TestMethod]
         public void SolvePart1()
         {
-            var fuel = EmbeddedResourceUtils.ReadLines("input.txt")
+            var fuel = EmbeddedResourceUtils.ReadLines("Day1.txt")
                 .Select(Fuel)
                 .Sum();
 
@@ -28,7 +28,7 @@ namespace Aoc2019.Puzzles.Day1
         [TestMethod]
         public void SolvePart2()
         {
-            var fuel = EmbeddedResourceUtils.ReadLines("input.txt")
+            var fuel = EmbeddedResourceUtils.ReadLines("Day1.txt")
                 .Select(MoreFuel)
                 .Sum();
 
