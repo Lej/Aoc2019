@@ -7,9 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Days\Day2\Day2.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Days\Day1\Day1.txt">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Days\Day2\Day2.txt" />
   </ItemGroup>
 
   <ItemGroup>
