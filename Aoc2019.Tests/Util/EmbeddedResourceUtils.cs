@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -33,8 +34,18 @@ namespace Aoc2019.Tests.Util
         {
             var assembly = Assembly.GetExecutingAssembly();
             var resourceNames = assembly.GetManifestResourceNames();
-            var resourceName = resourceNames.SingleOrDefault(x => x.Contains(fileName));
+            var filteredResourceNames = resourceNames.Where(x => x.Contains(fileName)).ToList();
 
+            if (filteredResourceNames.Count == 0)
+            {
+                throw new InvalidOperationException($"Embedded resource '{fileName}' not found. Did you forget to embed it?");
+            }
+            if (filteredResourceNames.Count > 1)
+            {
+                throw new InvalidOperationException($"Found multiple embedded resources for '{fileName}': {string.Join(", ", filteredResourceNames)}");
+            }
+
+            var resourceName = filteredResourceNames.Single();
             var stream = assembly.GetManifestResourceStream(resourceName);
             var reader = new StreamReader(stream);
             return reader;

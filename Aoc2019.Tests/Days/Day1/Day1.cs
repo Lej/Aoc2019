@@ -16,6 +16,7 @@ namespace Aoc2019.Tests.Days.Day1
                 .Sum();
 
             Console.WriteLine(fuel);
+            Assert.AreEqual(3414791, fuel);
         }
 
         [DataTestMethod]
@@ -33,6 +34,7 @@ namespace Aoc2019.Tests.Days.Day1
                 .Sum();
 
             Console.WriteLine(fuel);
+            Assert.AreEqual(5119312, fuel);
         }
 
         [DataTestMethod]

@@ -17,7 +17,9 @@ namespace Aoc2019.Tests.Days.Day2
             memory[2] = 2;
             Run(memory);
 
-            Console.WriteLine(memory[0]);
+            var value = memory[0];
+            Console.WriteLine(value);
+            Assert.AreEqual(3790645, value);
         }
 
         [TestMethod]
@@ -35,7 +37,9 @@ namespace Aoc2019.Tests.Days.Day2
                     Run(memory);
                     if (memory[0] == 19690720)
                     {
-                        Console.WriteLine(100 * noun + verb);
+                        var value = 100 * noun + verb;
+                        Console.WriteLine(value);
+                        Assert.AreEqual(6577, value);
                         break;
                     }
                 }
