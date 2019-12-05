@@ -1,17 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Aoc2019.Tests.Util
 {
     public static class EnumerableExtensions
     {
+        public static IEnumerable<TSource> Pad<TSource>(this IEnumerable<TSource> source, int paddedLength, TSource padding)
+        {
+            var i = 0;
+            foreach (var item in source)
+            {
+                i++;
+                yield return item;
+            }
+            for(; i < paddedLength; i++)
+            {
+                yield return padding;
+            }
+        }
+
+        public static int ToInt(this IEnumerable<int> digits) 
+        {
+            return digits.Reverse().Select((digit, i) => digit * 10.Pow(i)).Sum();
+        }
+
         public static IEnumerable<TSource> ForEach<TSource>(this IEnumerable<TSource> source, Action<TSource> action)
         {
+            var items = new List<TSource>();
             foreach (var item in source)
             {
                 action(item);
-                yield return item;
+                items.Add(item);
             }
+            return items;
         }
 
         public static IEnumerable<TSource> AsEnumerable<TSource>(this TSource source)
