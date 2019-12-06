@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +7,18 @@ namespace Aoc2019.Tests.Util
 {
     public static class EnumerableExtensions
     {
+        public static IEnumerable<TSource> Flatten<TSource>(this IEnumerable<TSource> source, Func<TSource, IEnumerable<TSource>> children)
+        {
+            foreach (var item in source)
+            {
+                yield return item;
+                foreach (var child in children(item).Flatten(children))
+                {
+                    yield return child;
+                }
+            }
+        }
+
         public static IEnumerable<TSource> Pad<TSource>(this IEnumerable<TSource> source, int paddedLength, TSource padding)
         {
             var i = 0;
