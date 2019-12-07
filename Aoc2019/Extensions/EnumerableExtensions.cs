@@ -52,7 +52,7 @@ namespace Aoc2019.Extensions
                 i++;
                 yield return item;
             }
-            for(; i < paddedLength; i++)
+            for (; i < paddedLength; i++)
             {
                 yield return padding;
             }
@@ -72,7 +72,7 @@ namespace Aoc2019.Extensions
             }
         }
 
-        public static int ToInt(this IEnumerable<int> digits) 
+        public static int ToInt(this IEnumerable<int> digits)
         {
             return digits.Reverse().Select((digit, i) => digit * 10.Pow(i)).Sum();
         }

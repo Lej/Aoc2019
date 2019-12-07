@@ -58,7 +58,8 @@ namespace Aoc2019.Tests.Days.Day4
             {
                 if (digits[i] == digits[i + 1]
                     && (i == 0 || digits[i - 1] != digits[i])
-                    && (i == digits.Length - 2 || digits[i + 2] != digits[i])) {
+                    && (i == digits.Length - 2 || digits[i + 2] != digits[i]))
+                {
                     return true;
                 }
             }

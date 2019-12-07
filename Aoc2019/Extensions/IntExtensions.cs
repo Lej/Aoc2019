@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -32,7 +31,7 @@ namespace Aoc2019.Extensions
 
                 var quotient = dividend / divisor;
                 dividend = quotient;
-                
+
                 divisor++;
             } while (dividend > 0);
             return digits.ToArray();
@@ -52,7 +51,7 @@ namespace Aoc2019.Extensions
         {
             if (exponent < 0) throw new NotImplementedException();
             int result = 1;
-            for(var i = 0; i < exponent; i++)
+            for (var i = 0; i < exponent; i++)
             {
                 result *= baze;
             }

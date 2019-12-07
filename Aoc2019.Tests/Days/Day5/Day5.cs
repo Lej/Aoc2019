@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Aoc2019.Extensions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Aoc2019.Extensions;
 using Aoc2019.Intcode;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Linq;
 
 namespace Aoc2019.Tests.Days.Day5
 {

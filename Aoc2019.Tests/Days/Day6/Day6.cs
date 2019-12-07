@@ -59,7 +59,7 @@ namespace Aoc2019.Tests.Days.Day6
                 {
                     satellites[pair.Primary] = primary = new Satellite(pair.Primary);
                 }
-                
+
                 if (!satellites.TryGetValue(pair.Satellite, out var satellite))
                 {
                     satellites[pair.Satellite] = satellite = new Satellite(pair.Satellite);

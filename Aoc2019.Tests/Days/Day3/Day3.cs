@@ -122,7 +122,8 @@ namespace Aoc2019.Tests.Days.Day3
                     distance++;
                     x += dx;
                     y += dy;
-                    if (!map.TryGetValue((x, y), out var distances)) {
+                    if (!map.TryGetValue((x, y), out var distances))
+                    {
                         distances = map[(x, y)] = new Dictionary<int, int>();
                     }
                     if (!distances.ContainsKey(wire.Index))

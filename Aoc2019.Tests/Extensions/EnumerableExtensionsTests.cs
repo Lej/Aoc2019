@@ -15,7 +15,8 @@ namespace Aoc2019.Tests.Extensions
 
         [DataTestMethod]
         [DataRow("abc", new object[] { new string[] { "abc", "acb", "bac", "bca", "cab", "cba" } })]
-        public void PermutationsTest(string elements, string[] expectedPermutations) {
+        public void PermutationsTest(string elements, string[] expectedPermutations)
+        {
             var permutations = elements.ToCharArray().Permutations().Select(x => string.Join("", x));
             Assert.That.SequenceEquals(expectedPermutations, permutations);
         }
