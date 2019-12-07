@@ -15,7 +15,7 @@ namespace Aoc2019.Tests.Days.Day5
         {
             var text = this.ReadEmbedded("Day5.txt");
             var program = new Program(text);
-            program.Input.Enqueue(1);
+            program.Input.Write(1);
             program.Execute();
 
             program.Output.Reverse().Skip(1).ForEach(x => Assert.AreEqual(0, x));
@@ -29,11 +29,11 @@ namespace Aoc2019.Tests.Days.Day5
         {
             var text = this.ReadEmbedded("Day5.txt");
             var program = new Program(text);
-            program.Input.Enqueue(5);
+            program.Input.Write(5);
             program.Execute();
 
             Assert.AreEqual(1, program.Output.Count);
-            var code = program.Output.Dequeue();
+            var code = program.Output.Read();
             Console.WriteLine(code);
             Assert.AreEqual(236453, code);
         }

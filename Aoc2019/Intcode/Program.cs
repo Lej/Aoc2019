@@ -1,20 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Aoc2019.Intcode
 {
     public class Program
     {
+        private static int NextProgramId = 0;
+
+        public int ProgramId { get; } = NextProgramId++;
         public int[] Memory { get; private set; }
-        public Queue<int> Input { get; set; } = new Queue<int>();
-        public Queue<int> Output { get; set; } = new Queue<int>();
+        public Stream<int> Input { get; set; } = new Stream<int>();
+        public Stream<int> Output { get; set; } = new Stream<int>();
 
         private int _instructionPointer = 0;
 
         public Program(string input)
         {
             Memory = input.Split(",").Select(int.Parse).ToArray();
+        }
+
+        public Program Pipe(Program destination)
+        {
+            destination.Input = Output;
+            return destination;
+        }
+
+        public async Task ExecuteAsync()
+        {
+            await Task.Run(Execute);
         }
 
         public void Execute()
@@ -49,14 +63,14 @@ namespace Aoc2019.Intcode
                     }
                 case OpCode.Input:
                     {
-                        Write(0, Input.Dequeue());
+                        Write(0, Input.Read());
                         _instructionPointer += 2;
                         return false;
                     }
                 case OpCode.Output:
                     {
                         var p0 = Read(instruction, 0);
-                        Output.Enqueue(p0);
+                        Output.Write(p0);
                         _instructionPointer += 2;
                         return false;
                     }
@@ -132,6 +146,11 @@ namespace Aoc2019.Intcode
             var index = _instructionPointer + parameterIndex + 1;
             var position = Memory[index];
             Memory[position] = value;
+        }
+
+        public override string ToString()
+        {
+            return $"ProgramId={ProgramId}";
         }
     }
 }

@@ -6,6 +6,32 @@ namespace Aoc2019.Extensions
 {
     public static class EnumerableExtensions
     {
+        public static IEnumerable<IEnumerable<TSource>> Permutations<TSource>(this IEnumerable<TSource> source)
+        {
+            var items = source.ToList();
+            var factorial = items.Count.Factorial();
+            for (var i = 0; i < factorial; i++)
+            {
+                yield return items.Permutation(i);
+            }
+        }
+
+        public static IEnumerable<TSource> Permutation<TSource>(this IEnumerable<TSource> source, int n)
+        {
+            var nodes = new LinkedList<TSource>(source);
+            var factoradicDigits = n.ToFactoradicDigits().PadLeft(nodes.Count, 0);
+            foreach (var factoradicDigit in factoradicDigits)
+            {
+                var node = nodes.First;
+                for (var i = 0; i < factoradicDigit; i++)
+                {
+                    node = node.Next;
+                }
+                nodes.Remove(node);
+                yield return node.Value;
+            }
+        }
+
         public static IEnumerable<TSource> Flatten<TSource>(this IEnumerable<TSource> source, Func<TSource, IEnumerable<TSource>> children)
         {
             foreach (var item in source)
@@ -18,7 +44,7 @@ namespace Aoc2019.Extensions
             }
         }
 
-        public static IEnumerable<TSource> Pad<TSource>(this IEnumerable<TSource> source, int paddedLength, TSource padding)
+        public static IEnumerable<TSource> PadRight<TSource>(this IEnumerable<TSource> source, int paddedLength, TSource padding)
         {
             var i = 0;
             foreach (var item in source)
@@ -29,6 +55,20 @@ namespace Aoc2019.Extensions
             for(; i < paddedLength; i++)
             {
                 yield return padding;
+            }
+        }
+
+        public static IEnumerable<TSource> PadLeft<TSource>(this IEnumerable<TSource> source, int paddedLength, TSource padding)
+        {
+            var items = source.ToList();
+            var missing = Math.Max(0, paddedLength - items.Count);
+            for (var i = 0; i < missing; i++)
+            {
+                yield return padding;
+            }
+            foreach (var item in items)
+            {
+                yield return item;
             }
         }
 
