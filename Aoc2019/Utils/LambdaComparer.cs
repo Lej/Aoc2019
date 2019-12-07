@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Aoc2019.Tests.Util
+namespace Aoc2019.Utils
 {
     public class LambdaComparer<T> : IEqualityComparer<T>
     {

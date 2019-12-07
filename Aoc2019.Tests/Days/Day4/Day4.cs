@@ -1,4 +1,4 @@
-﻿using Aoc2019.Tests.Util;
+﻿using Aoc2019.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Globalization;

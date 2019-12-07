@@ -1,4 +1,4 @@
-﻿using Aoc2019.Tests.Util;
+﻿using Aoc2019.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace Aoc2019.Tests.Days.Day3
         [TestMethod]
         public void SolvePart1()
         {
-            var distance = DistancePart1(CreateMap(Parse(EmbeddedResourceUtils.ReadLines("Day3.txt"))));
+            var distance = DistancePart1(CreateMap(Parse(this.ReadEmbeddedLines("Day3.txt"))));
 
             Console.WriteLine(distance);
             Assert.AreEqual(266, distance);
@@ -21,7 +21,7 @@ namespace Aoc2019.Tests.Days.Day3
         [TestMethod]
         public void SolvePart2()
         {
-            var distance = DistancePart2(CreateMap(Parse(EmbeddedResourceUtils.ReadLines("Day3.txt"))));
+            var distance = DistancePart2(CreateMap(Parse(this.ReadEmbeddedLines("Day3.txt"))));
 
             Console.WriteLine(distance);
             Assert.AreEqual(19242, distance);

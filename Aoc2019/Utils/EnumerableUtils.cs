@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aoc2019.Tests.Util
+namespace Aoc2019.Utils
 {
     public class EnumerableUtils
     {

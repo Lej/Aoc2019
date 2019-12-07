@@ -1,10 +1,10 @@
-﻿using Aoc2019.Tests.Util;
+﻿using Aoc2019.Extensions;
+using Aoc2019.Orbits;
+using Aoc2019.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Aoc2019.Tests.Days.Day6
 {
@@ -14,7 +14,7 @@ namespace Aoc2019.Tests.Days.Day6
         [TestMethod]
         public void SolvePart1()
         {
-            var lines = EmbeddedResourceUtils.ReadLines("Day6.txt");
+            var lines = this.ReadEmbeddedLines("Day6.txt");
             var com = GetCom(lines);
 
             var orbits = com.AsEnumerable().Flatten(x => x.Satellites).Sum(x => x.Depth);
@@ -25,7 +25,7 @@ namespace Aoc2019.Tests.Days.Day6
         [TestMethod]
         public void SolvePart2()
         {
-            var lines = EmbeddedResourceUtils.ReadLines("Day6.txt");
+            var lines = this.ReadEmbeddedLines("Day6.txt");
             var com = GetCom(lines);
 
             var you = com.AsEnumerable().Flatten(x => x.Satellites).Single(x => x.Name == "YOU");
@@ -38,26 +38,6 @@ namespace Aoc2019.Tests.Days.Day6
             var transfers = (you.Depth - commonAncestor.Depth) + (san.Depth - commonAncestor.Depth) - 2;
             Console.WriteLine(transfers);
             Assert.AreEqual(286, transfers);
-        }
-
-        public class Satellite
-        {
-            public string Name { get; }
-            public Satellite Orbits { get; private set; }
-            public List<Satellite> Satellites { get; } = new List<Satellite>();
-            public int Depth => Orbits == null ? 0 : Orbits.Depth + 1;
-            public List<Satellite> Parents => Orbits == null ? new List<Satellite>() : new List<Satellite>(Orbits.Parents).Append(Orbits).ToList();
-
-            public Satellite(string name)
-            {
-                Name = name;
-            }
-
-            public void AddSatellite(Satellite satellite)
-            {
-                Satellites.Add(satellite);
-                satellite.Orbits = this;
-            }
         }
 
         public Satellite GetCom(IEnumerable<string> lines)
@@ -91,26 +71,6 @@ namespace Aoc2019.Tests.Days.Day6
             var com = satellites.Values.Single(x => x.Orbits == null);
 
             return com;
-        }
-
-        private string ToString(Satellite primary, string prefix = "", bool isLast = true)
-        {
-            var builder = new StringBuilder();
-
-            builder.Append(prefix);
-            builder.Append(isLast ? "└" : "├");
-            builder.AppendLine(primary.Name);
-
-            for (var i = 0; i < primary.Satellites.Count; i++)
-            {
-                var satellite = primary.Satellites[i];
-                var satellitePrefix = prefix + (isLast ? " " : "│");
-                var isLastSatellite = i == (primary.Satellites.Count - 1);
-
-                builder.Append(ToString(satellite, satellitePrefix, isLastSatellite));
-            }
-
-            return builder.ToString();
         }
     }
 }

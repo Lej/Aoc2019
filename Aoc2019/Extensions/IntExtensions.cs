@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 
-namespace Aoc2019.Tests.Util
+namespace Aoc2019.Extensions
 {
     public static class IntExtensions
     {
