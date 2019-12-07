@@ -6,41 +6,22 @@ namespace Aoc2019.Intcode
 {
     public class Program
     {
-        public IReadOnlyList<int> Memory => Array.AsReadOnly(_memory);
+        public int[] Memory { get; private set; }
+        public Queue<int> Input { get; set; } = new Queue<int>();
+        public Queue<int> Output { get; set; } = new Queue<int>();
 
-        private readonly int[] _memory;
         private int _instructionPointer = 0;
-        private Queue<int> _input;
-        private Queue<int> _output;
 
         public Program(string input)
         {
-            _memory = input.Split(",").Select(int.Parse).ToArray();
+            Memory = input.Split(",").Select(int.Parse).ToArray();
         }
 
-        public Program(int[] memory)
+        public void Execute()
         {
-            _memory = memory;
-        }
-
-        public void SetMemory(int index, int value)
-        {
-            _memory[index] = value;
-        }
-
-        public int GetMemory(int index)
-        {
-            return _memory[index];
-        }
-
-        public void Execute(Queue<int> input = null, Queue<int> output = null)
-        {
-            _input = input;
-            _output = output;
-
             while (true)
             {
-                var instruction = new Instruction(_memory[_instructionPointer]);
+                var instruction = new Instruction(Memory[_instructionPointer]);
                 var stop = ExecuteInstruction(instruction);
                 if (stop) break;
             }
@@ -68,14 +49,14 @@ namespace Aoc2019.Intcode
                     }
                 case OpCode.Input:
                     {
-                        Write(0, _input.Dequeue());
+                        Write(0, Input.Dequeue());
                         _instructionPointer += 2;
                         return false;
                     }
                 case OpCode.Output:
                     {
                         var p0 = Read(instruction, 0);
-                        _output.Enqueue(p0);
+                        Output.Enqueue(p0);
                         _instructionPointer += 2;
                         return false;
                     }
@@ -133,11 +114,11 @@ namespace Aoc2019.Intcode
         private int Read(Instruction instruction, int parameterIndex)
         {
             var index = _instructionPointer + parameterIndex + 1;
-            var immediate = _memory[index];
+            var immediate = Memory[index];
             switch (instruction.GetMode(parameterIndex))
             {
                 case Mode.Position:
-                    var value = _memory[immediate];
+                    var value = Memory[immediate];
                     return value;
                 case Mode.Immediate:
                     return immediate;
@@ -149,8 +130,8 @@ namespace Aoc2019.Intcode
         private void Write(int parameterIndex, int value)
         {
             var index = _instructionPointer + parameterIndex + 1;
-            var position = _memory[index];
-            _memory[position] = value;
+            var position = Memory[index];
+            Memory[position] = value;
         }
     }
 }

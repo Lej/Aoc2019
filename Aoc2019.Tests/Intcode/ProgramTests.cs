@@ -21,7 +21,7 @@ namespace Aoc2019.Tests.Intcode
         public void ProgramMemoryTest(string input, int[] output)
         {
             var program = new Program(input);
-            program.Execute(null, null);
+            program.Execute();
             var memory = program.Memory;
             Assert.That.SequenceEquals(output, memory.ToList());
         }
@@ -52,14 +52,12 @@ namespace Aoc2019.Tests.Intcode
         [DataRow("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99", new[] { 7 }, new[] { 999 })] // 7 < 8 -> 999
         [DataRow("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99", new[] { 8 }, new[] { 1000 })] // 8 == 8 -> 1000
         [DataRow("3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99", new[] { 9 }, new[] { 1001 })] // 9 > 8 -> 1001
-        public void ProgramOutputTest(string programText, IEnumerable<int> actualInput, IEnumerable<int> expectedOutput)
+        public void ProgramOutputTest(string programText, IEnumerable<int> input, IEnumerable<int> output)
         {
             var program = new Program(programText);
-            var input = new Queue<int>();
-            actualInput.ForEach(x => input.Enqueue(x));
-            var output = new Queue<int>();
-            program.Execute(input, output);
-            Assert.That.SequenceEquals(expectedOutput, output);
+            input.ForEach(x => program.Input.Enqueue(x));
+            program.Execute();
+            Assert.That.SequenceEquals(output, program.Output);
         }
     }
 }

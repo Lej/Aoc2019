@@ -14,11 +14,11 @@ namespace Aoc2019.Tests.Days.Day2
             var input = this.ReadEmbedded("Day2.txt");
 
             var program = new Program(input);
-            program.SetMemory(1, 12);
-            program.SetMemory(2, 2);
+            program.Memory[1] = 12;
+            program.Memory[2] = 2;
             program.Execute();
 
-            var value = program.GetMemory(0);
+            var value = program.Memory[0];
             Console.WriteLine(value);
             Assert.AreEqual(3790645, value);
         }
@@ -33,11 +33,11 @@ namespace Aoc2019.Tests.Days.Day2
                 for (var verb = 0; verb < 100; verb++)
                 {
                     var program = new Program(input);
-                    program.SetMemory(1, noun);
-                    program.SetMemory(2, verb);
+                    program.Memory[1] = noun;
+                    program.Memory[2] = verb;
                     program.Execute();
 
-                    if (program.GetMemory(0) == 19690720)
+                    if (program.Memory[0] == 19690720)
                     {
                         var value = 100 * noun + verb;
                         Console.WriteLine(value);

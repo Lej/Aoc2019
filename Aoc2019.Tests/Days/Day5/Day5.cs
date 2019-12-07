@@ -13,16 +13,13 @@ namespace Aoc2019.Tests.Days.Day5
         [TestMethod]
         public void SolvePart1()
         {
-            var input = new Queue<int>();
-            input.Enqueue(1);
-            var output = new Queue<int>();
-
             var text = this.ReadEmbedded("Day5.txt");
             var program = new Program(text);
-            program.Execute(input, output);
+            program.Input.Enqueue(1);
+            program.Execute();
 
-            output.Reverse().Skip(1).ForEach(x => Assert.AreEqual(0, x));
-            var code = output.Reverse().Take(1).Single();
+            program.Output.Reverse().Skip(1).ForEach(x => Assert.AreEqual(0, x));
+            var code = program.Output.Reverse().Take(1).Single();
             Console.WriteLine(code);
             Assert.AreEqual(13547311, code);
         }
@@ -30,16 +27,13 @@ namespace Aoc2019.Tests.Days.Day5
         [TestMethod]
         public void SolvePart2()
         {
-            var input = new Queue<int>();
-            input.Enqueue(5);
-            var output = new Queue<int>();
-
             var text = this.ReadEmbedded("Day5.txt");
             var program = new Program(text);
-            program.Execute(input, output);
+            program.Input.Enqueue(5);
+            program.Execute();
 
-            Assert.AreEqual(1, output.Count);
-            var code = output.Dequeue();
+            Assert.AreEqual(1, program.Output.Count);
+            var code = program.Output.Dequeue();
             Console.WriteLine(code);
             Assert.AreEqual(236453, code);
         }
