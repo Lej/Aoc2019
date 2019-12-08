@@ -44,7 +44,7 @@ namespace Aoc2019.Extensions
 
         public static int[] ToDigits(this int i)
         {
-            return i.ToString().ToCharArray().Select(CharUnicodeInfo.GetDecimalDigitValue).ToArray();
+            return i.ToString().ToCharArray().Select(x => x.ToDigit()).ToArray();
         }
 
         public static int Pow(this int baze, int exponent)
