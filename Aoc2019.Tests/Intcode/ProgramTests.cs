@@ -3,6 +3,7 @@ using Aoc2019.Intcode;
 using Aoc2019.Tests.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Aoc2019.Tests.Intcode
 {
@@ -20,7 +21,7 @@ namespace Aoc2019.Tests.Intcode
         {
             var program = new Program(programText);
             program.Execute();
-            var memory = program.Memory;
+            var memory = program.Memory.Select(kvp => kvp).OrderBy(kvp => kvp.Key).Select(kvp => kvp.Value.ToInt()).ToList();
             Assert.That.SequenceEquals(expectedMemory, memory);
         }
 
@@ -49,7 +50,31 @@ namespace Aoc2019.Tests.Intcode
             var program = new Program(programText);
             input.ForEach(x => program.Input.Write(x));
             program.Execute();
-            Assert.That.SequenceEquals(expectedOutput, program.Output);
+            var output = program.Output.Select(x => x.ToInt()).ToList();
+            Assert.That.SequenceEquals(expectedOutput, output);
+        }
+
+        [DataTestMethod]
+        [DataRow("109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99", "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99")]
+        [DataRow("1102,34915192,34915192,7,4,7,99,0", "1219070632396864")]
+        [DataRow("104,1125899906842624,99", "1125899906842624")]
+        public void ProgramRelativeBaseTest(string programText, string expectedOutput)
+        {
+            var program = new Program(programText);
+            program.Execute();
+            var output = string.Join(",", program.Output);
+            Assert.AreEqual(expectedOutput, output);
+        }
+
+        [DataTestMethod]
+        [DataRow("109,500,203,500,004,1000,99", "42")]
+        public void ProgramDay9Test(string programText, string expectedOutput)
+        {
+            var program = new Program(programText);
+            program.Input.Write(42);
+            program.Execute();
+            var output = string.Join(",", program.Output);
+            Assert.AreEqual(expectedOutput, output);
         }
     }
 }

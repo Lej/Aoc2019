@@ -68,7 +68,7 @@ namespace Aoc2019.Tests.Days.Day7
             var tasks = programs.Select(x => x.ExecuteAsync()).ToArray();
             Task.WaitAll(tasks);
             var thrusterSignal = programs.Last().Output.Read();
-            return thrusterSignal;
+            return thrusterSignal.ToInt();
         }
     }
 }

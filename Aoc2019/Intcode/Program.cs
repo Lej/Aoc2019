@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace Aoc2019.Intcode
@@ -9,15 +11,22 @@ namespace Aoc2019.Intcode
         private static int NextProgramId = 0;
 
         public int ProgramId { get; } = NextProgramId++;
-        public int[] Memory { get; private set; }
-        public Stream<int> Input { get; set; } = new Stream<int>();
-        public Stream<int> Output { get; set; } = new Stream<int>();
+        public Dictionary<BigInteger, BigInteger> Memory { get; private set; }
+        public Stream<BigInteger> Input { get; set; } = new Stream<BigInteger>();
+        public Stream<BigInteger> Output { get; set; } = new Stream<BigInteger>();
 
-        private int _instructionPointer = 0;
+        private BigInteger _instructionPointer = 0;
+        private BigInteger _relativeBase = 0;
 
         public Program(string input)
         {
-            Memory = input.Split(",").Select(int.Parse).ToArray();
+            Memory = input.Split(",")
+                .Select((x, i) => new
+                {
+                    Index = new BigInteger(i),
+                    Value = BigInteger.Parse(x)
+                })
+                .ToDictionary(x => x.Index, x => x.Value);
         }
 
         public Program Pipe(Program destination)
@@ -35,13 +44,14 @@ namespace Aoc2019.Intcode
         {
             while (true)
             {
-                var instruction = new Instruction(Memory[_instructionPointer]);
-                var stop = ExecuteInstruction(instruction);
+                var value = Memory.GetValueOrDefault(_instructionPointer, BigInteger.Zero);
+                var instruction = new Instruction(value);
+                var stop = Execute(instruction);
                 if (stop) break;
             }
         }
 
-        private bool ExecuteInstruction(Instruction instruction)
+        private bool Execute(Instruction instruction)
         {
             switch (instruction.OpCode)
             {
@@ -49,7 +59,7 @@ namespace Aoc2019.Intcode
                     {
                         var p0 = Read(instruction, 0);
                         var p1 = Read(instruction, 1);
-                        Write(2, p0 + p1);
+                        Write(instruction, 2, p0 + p1);
                         _instructionPointer += 4;
                         return false;
                     }
@@ -57,13 +67,13 @@ namespace Aoc2019.Intcode
                     {
                         var p0 = Read(instruction, 0);
                         var p1 = Read(instruction, 1);
-                        Write(2, p0 * p1);
+                        Write(instruction, 2, p0 * p1);
                         _instructionPointer += 4;
                         return false;
                     }
                 case OpCode.Input:
                     {
-                        Write(0, Input.Read());
+                        Write(instruction, 0, Input.Read());
                         _instructionPointer += 2;
                         return false;
                     }
@@ -106,7 +116,7 @@ namespace Aoc2019.Intcode
                     {
                         var p0 = Read(instruction, 0);
                         var p1 = Read(instruction, 1);
-                        Write(2, p0 < p1 ? 1 : 0);
+                        Write(instruction, 2, p0 < p1 ? 1 : 0);
                         _instructionPointer += 4;
                         return false;
                     }
@@ -114,8 +124,15 @@ namespace Aoc2019.Intcode
                     {
                         var p0 = Read(instruction, 0);
                         var p1 = Read(instruction, 1);
-                        Write(2, p0 == p1 ? 1 : 0);
+                        Write(instruction, 2, p0 == p1 ? 1 : 0);
                         _instructionPointer += 4;
+                        return false;
+                    }
+                case OpCode.AdjustRelativeBase:
+                    {
+                        var p0 = Read(instruction, 0);
+                        _relativeBase += p0;
+                        _instructionPointer += 2;
                         return false;
                     }
                 case OpCode.Halt:
@@ -125,27 +142,46 @@ namespace Aoc2019.Intcode
             }
         }
 
-        private int Read(Instruction instruction, int parameterIndex)
+        private BigInteger Read(Instruction instruction, int parameterIndex)
         {
             var index = _instructionPointer + parameterIndex + 1;
-            var immediate = Memory[index];
+            var immediate = Memory.GetValueOrDefault(index, BigInteger.Zero);
             switch (instruction.GetMode(parameterIndex))
             {
                 case Mode.Position:
-                    var value = Memory[immediate];
-                    return value;
+                    {
+                        var value = Memory.GetValueOrDefault(immediate, BigInteger.Zero);
+                        return value;
+                    }
                 case Mode.Immediate:
-                    return immediate;
+                    {
+                        return immediate;
+                    }
+                case Mode.Relative:
+                    {
+                        var value = Memory.GetValueOrDefault(_relativeBase + immediate, BigInteger.Zero);
+                        return value;
+                    }
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        private void Write(int parameterIndex, int value)
+        private void Write(Instruction instruction, int parameterIndex, BigInteger value)
         {
+            var mode = instruction.GetMode(parameterIndex);
             var index = _instructionPointer + parameterIndex + 1;
-            var position = Memory[index];
-            Memory[position] = value;
+            var position = Memory.GetValueOrDefault(index, BigInteger.Zero);
+            switch (mode) {
+                case Mode.Position:
+                    Memory[position] = value;
+                    break;
+                case Mode.Relative:
+                    Memory[_relativeBase + position] = value;
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         public override string ToString()
